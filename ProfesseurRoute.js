@@ -3,7 +3,18 @@ const Professeur = require('../chemin/vers/models/Professeur');
 
 const router = express.Router();
 
-// Route pour récupérer tous les professeurs
+// Créer un nouveau professeur
+router.post('/professeurs', async (req, res) => {
+    try {
+        const nouveauProfesseur = await Professeur.create(req.body);
+        res.status(201).json(nouveauProfesseur);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
+// Récupérer tous les professeurs
 router.get('/professeurs', async (req, res) => {
     try {
         const professeurs = await Professeur.findAll();
@@ -14,18 +25,6 @@ router.get('/professeurs', async (req, res) => {
     }
 });
 
-// Route pour récupérer un professeur par son ID
-router.get('/professeurs/:id', async (req, res) => {
-    try {
-        const professeur = await Professeur.findByPk(req.params.id);
-        if (!professeur) {
-            return res.status(404).send('Professeur non trouvé');
-        }
-        res.json(professeur);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Erreur serveur');
-    }
-});
+// Autres routes spécifiques aux professeurs (mettre à jour, supprimer, etc.)
 
 module.exports = router;

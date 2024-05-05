@@ -3,7 +3,18 @@ const Etudiant = require('../chemin/vers/models/Etudiant');
 
 const router = express.Router();
 
-// Route pour récupérer tous les étudiants
+// Créer un nouvel étudiant
+router.post('/etudiants', async (req, res) => {
+    try {
+        const nouvelEtudiant = await Etudiant.create(req.body);
+        res.status(201).json(nouvelEtudiant);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
+// Récupérer tous les étudiants
 router.get('/etudiants', async (req, res) => {
     try {
         const etudiants = await Etudiant.findAll();
@@ -14,18 +25,6 @@ router.get('/etudiants', async (req, res) => {
     }
 });
 
-// Route pour récupérer un étudiant par son ID
-router.get('/etudiants/:id', async (req, res) => {
-    try {
-        const etudiant = await Etudiant.findByPk(req.params.id);
-        if (!etudiant) {
-            return res.status(404).send('Étudiant non trouvé');
-        }
-        res.json(etudiant);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Erreur serveur');
-    }
-});
+// Autres routes spécifiques aux étudiants (mettre à jour, supprimer, etc.)
 
 module.exports = router;
